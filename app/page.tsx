@@ -44,21 +44,21 @@ export default function Home() {
 
             {/* Desktop Navigation */}
             <nav className="hidden md:flex items-center space-x-8">
-              <Link href="/" className="text-gray-600 hover:text-gray-900">
+              <Link href="/" className="text-black hover:text-gray-900">
                 Home
               </Link>
               <Link
                 href="/products"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-black hover:text-gray-900"
               >
                 Shop
               </Link>
-              <Link href="/about" className="text-gray-600 hover:text-gray-900">
+              <Link href="/about" className="text-black hover:text-gray-900">
                 About
               </Link>
               <Link
                 href="/contact"
-                className="text-gray-600 hover:text-gray-900"
+                className="text-black hover:text-gray-900"
               >
                 Contact
               </Link>
@@ -75,7 +75,7 @@ export default function Home() {
               </div>
 
               <Link href="/cart" className="relative">
-                <ShoppingBag className="h-6 w-6 text-gray-600" />
+                <ShoppingBag className="h-6 w-6 text-black" />
                 <span className="absolute -top-2 -right-2 bg-gray-800 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
                   0
                 </span>
@@ -86,9 +86,9 @@ export default function Home() {
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
               >
                 {isMenuOpen ? (
-                  <X className="h-6 w-6 text-gray-600" />
+                  <X className="h-6 w-6 text-black" />
                 ) : (
-                  <Menu className="h-6 w-6 text-gray-600" />
+                  <Menu className="h-6 w-6 text-black" />
                 )}
               </button>
             </div>
@@ -106,24 +106,24 @@ export default function Home() {
                 <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
               </div>
               <div className="flex flex-col space-y-3">
-                <Link href="/" className="text-gray-600 hover:text-gray-900">
+                <Link href="/" className="text-black hover:text-gray-900">
                   Home
                 </Link>
                 <Link
                   href="/products"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-black hover:text-gray-900"
                 >
                   Shop
                 </Link>
                 <Link
                   href="/about"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-black hover:text-gray-900"
                 >
                   About
                 </Link>
                 <Link
                   href="/contact"
-                  className="text-gray-600 hover:text-gray-900"
+                  className="text-black hover:text-gray-900"
                 >
                   Contact
                 </Link>
@@ -141,7 +141,7 @@ export default function Home() {
               <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
                 Discover Your Style
               </h1>
-              <p className="text-lg text-gray-600 mb-8">
+              <p className="text-lg text-black mb-8">
                 Explore our latest collection of trendy and comfortable clothing
                 for every occasion.
               </p>
@@ -170,12 +170,12 @@ export default function Home() {
       {/* Categories */}
       <section className="py-12 bg-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-12 text-black">
             Shop by Category
           </h2>
 
           {categories.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-black">
               {categories.map((category, index) => (
                 <Link
                   href={`/products?category=${category.slug}`}
@@ -193,7 +193,7 @@ export default function Home() {
                       className="object-cover group-hover:scale-105 transition duration-300"
                     />
                   </div>
-                  <h3 className="text-lg font-medium text-center">
+                  <h3 className="text-lg font-medium text-center text-black">
                     {category.name}
                   </h3>
                 </Link>
@@ -205,7 +205,7 @@ export default function Home() {
                 <Link
                   href={`/products?category=${cat.toLowerCase()}`}
                   key={index}
-                  className="group"
+                  className="group text-black"
                 >
                   <div className="relative h-48 rounded-lg overflow-hidden mb-3">
                     <Image
@@ -226,7 +226,7 @@ export default function Home() {
       {/* Featured Products */}
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-3xl font-bold text-center mb-12 text-black">
             Featured Products
           </h2>
 
@@ -252,7 +252,7 @@ export default function Home() {
                   key={index}
                   className="group"
                 >
-                  <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                  <div className="bg-white rounded-lg shadow-sm overflow-hidden text-black">
                     <div className="relative h-48">
                       <Image
                         src={
@@ -265,7 +265,7 @@ export default function Home() {
                       />
                     </div>
                     <div className="p-4">
-                      <h3 className="text-lg font-medium mb-1 group-hover:text-gray-700">
+                      <h3 className="text-lg font-medium mb-1 group-hover:text-gray-600">
                         {product.name}
                       </h3>
                       <p className="text-gray-500 text-sm mb-2">
@@ -331,7 +331,8 @@ export default function Home() {
             <input
               type="email"
               placeholder="Your email address"
-              className="flex-grow px-4 py-3 rounded-l-lg text-gray-900 focus:outline-none"
+              className="flex-grow px-4 py-3 rounded-l-lg text-white border"
+              aria-label="Email address"
               required
             />
             <button
@@ -349,7 +350,7 @@ export default function Home() {
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <h3 className="text-lg font-bold mb-4">FashionHub</h3>
+              <h3 className="text-lg text-black mb-4 font-bold">FashionHub</h3>
               <p className="text-gray-600 mb-4">
                 Your one-stop destination for trendy and comfortable clothing.
               </p>
