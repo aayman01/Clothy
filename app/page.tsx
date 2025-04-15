@@ -97,13 +97,13 @@ export default function Home() {
           {/* Mobile Menu */}
           {isMenuOpen && (
             <div className="md:hidden mt-4 pb-4">
-              <div className="relative mb-4">
+              <div className="relative mb-4 text-black">
                 <input
                   type="text"
                   placeholder="Search products..."
                   className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
                 />
-                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-800" />
               </div>
               <div className="flex flex-col space-y-3">
                 <Link href="/" className="text-black hover:text-gray-900">
