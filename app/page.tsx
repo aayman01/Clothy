@@ -1,102 +1,467 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
 import Image from "next/image";
+import { Search, ShoppingBag, Menu, X } from "lucide-react";
 
 export default function Home() {
-  return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm/6 text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-[family-name:var(--font-geist-mono)] font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [featuredProducts, setFeaturedProducts] = useState<any[]>([]);
+  const [categories, setCategories] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isMenuOpen, setIsMenuOpen] = useState<boolean>(false);
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  useEffect(() => {
+    // Fetch featured products
+    fetch("/api/products/featured")
+      .then((res) => res.json())
+      .then((data) => {
+        setFeaturedProducts(data);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error fetching featured products:", err);
+        setIsLoading(false);
+      });
+
+    // Fetch categories
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => setCategories(data))
+      .catch((err) => console.error("Error fetching categories:", err));
+  }, []);
+
+  return (
+    <div className="min-h-screen">
+      {/* Header */}
+      <header className="bg-white shadow-sm sticky top-0 z-10">
+        <div className="container mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            <Link href="/" className="text-2xl font-bold text-gray-800">
+              FashionHub
+            </Link>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center space-x-8">
+              <Link href="/" className="text-gray-600 hover:text-gray-900">
+                Home
+              </Link>
+              <Link
+                href="/products"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Shop
+              </Link>
+              <Link href="/about" className="text-gray-600 hover:text-gray-900">
+                About
+              </Link>
+              <Link
+                href="/contact"
+                className="text-gray-600 hover:text-gray-900"
+              >
+                Contact
+              </Link>
+            </nav>
+
+            <div className="flex items-center space-x-4">
+              <div className="relative hidden md:block">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-64 pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                />
+                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+              </div>
+
+              <Link href="/cart" className="relative">
+                <ShoppingBag className="h-6 w-6 text-gray-600" />
+                <span className="absolute -top-2 -right-2 bg-gray-800 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  0
+                </span>
+              </Link>
+
+              <button
+                className="md:hidden"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? (
+                  <X className="h-6 w-6 text-gray-600" />
+                ) : (
+                  <Menu className="h-6 w-6 text-gray-600" />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Mobile Menu */}
+          {isMenuOpen && (
+            <div className="md:hidden mt-4 pb-4">
+              <div className="relative mb-4">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  className="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500"
+                />
+                <Search className="absolute left-3 top-2.5 h-5 w-5 text-gray-400" />
+              </div>
+              <div className="flex flex-col space-y-3">
+                <Link href="/" className="text-gray-600 hover:text-gray-900">
+                  Home
+                </Link>
+                <Link
+                  href="/products"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Shop
+                </Link>
+                <Link
+                  href="/about"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  About
+                </Link>
+                <Link
+                  href="/contact"
+                  className="text-gray-600 hover:text-gray-900"
+                >
+                  Contact
+                </Link>
+              </div>
+            </div>
+          )}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </header>
+
+      {/* Hero Section */}
+      <section className="bg-gray-100">
+        <div className="container mx-auto px-4 py-16 md:py-24">
+          <div className="flex flex-col md:flex-row items-center">
+            <div className="md:w-1/2 mb-8 md:mb-0 md:pr-8">
+              <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                Discover Your Style
+              </h1>
+              <p className="text-lg text-gray-600 mb-8">
+                Explore our latest collection of trendy and comfortable clothing
+                for every occasion.
+              </p>
+              <Link
+                href="/products"
+                className="inline-block bg-gray-900 text-white px-8 py-3 rounded-lg font-medium hover:bg-gray-800 transition duration-300"
+              >
+                Shop Now
+              </Link>
+            </div>
+            <div className="md:w-1/2">
+              <div className="relative h-64 md:h-96 w-full rounded-lg overflow-hidden">
+                <Image
+                  src="/placeholder.svg?height=600&width=800"
+                  alt="Fashion collection"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="py-12 bg-white">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Shop by Category
+          </h2>
+
+          {categories.length > 0 ? (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {categories.map((category, index) => (
+                <Link
+                  href={`/products?category=${category.slug}`}
+                  key={index}
+                  className="group"
+                >
+                  <div className="relative h-48 rounded-lg overflow-hidden mb-3">
+                    <Image
+                      src={
+                        category.image ||
+                        `/placeholder.svg?height=300&width=300`
+                      }
+                      alt={category.name}
+                      fill
+                      className="object-cover group-hover:scale-105 transition duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-medium text-center">
+                    {category.name}
+                  </h3>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+              {["Men", "Women", "Accessories", "Footwear"].map((cat, index) => (
+                <Link
+                  href={`/products?category=${cat.toLowerCase()}`}
+                  key={index}
+                  className="group"
+                >
+                  <div className="relative h-48 rounded-lg overflow-hidden mb-3">
+                    <Image
+                      src={`/placeholder.svg?height=300&width=300`}
+                      alt={cat}
+                      fill
+                      className="object-cover group-hover:scale-105 transition duration-300"
+                    />
+                  </div>
+                  <h3 className="text-lg font-medium text-center">{cat}</h3>
+                </Link>
+              ))}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Featured Products */}
+      <section className="py-12 bg-gray-50">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl font-bold text-center mb-12">
+            Featured Products
+          </h2>
+
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-sm p-4 animate-pulse"
+                >
+                  <div className="h-48 bg-gray-200 rounded-lg mb-4"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-2 w-2/3"></div>
+                  <div className="h-4 bg-gray-200 rounded mb-4 w-1/2"></div>
+                  <div className="h-6 bg-gray-200 rounded w-1/3"></div>
+                </div>
+              ))}
+            </div>
+          ) : featuredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product, index) => (
+                <Link
+                  href={`/products/${product._id}`}
+                  key={index}
+                  className="group"
+                >
+                  <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+                    <div className="relative h-48">
+                      <Image
+                        src={
+                          product.images[0] ||
+                          `/placeholder.svg?height=300&width=300`
+                        }
+                        alt={product.name}
+                        fill
+                        className="object-cover group-hover:scale-105 transition duration-300"
+                      />
+                    </div>
+                    <div className="p-4">
+                      <h3 className="text-lg font-medium mb-1 group-hover:text-gray-700">
+                        {product.name}
+                      </h3>
+                      <p className="text-gray-500 text-sm mb-2">
+                        {product?.category}
+                      </p>
+                      <p className="font-bold text-gray-900">
+                        ${product.price.toFixed(2)}
+                      </p>
+                    </div>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {[...Array(4)].map((_, index) => (
+                <div
+                  key={index}
+                  className="bg-white rounded-lg shadow-sm overflow-hidden"
+                >
+                  <div className="relative h-48">
+                    <Image
+                      src={`/placeholder.svg?height=300&width=300`}
+                      alt="Product placeholder"
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-4">
+                    <h3 className="text-lg font-medium mb-1">
+                      Sample Product {index + 1}
+                    </h3>
+                    <p className="text-gray-500 text-sm mb-2">Category</p>
+                    <p className="font-bold text-gray-900">
+                      ${(19.99 + index * 10).toFixed(2)}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          <div className="text-center mt-10">
+            <Link
+              href="/products"
+              className="inline-block border border-gray-900 text-gray-900 px-8 py-3 rounded-lg font-medium hover:bg-gray-900 hover:text-white transition duration-300"
+            >
+              View All Products
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Newsletter */}
+      <section className="py-16 bg-gray-900 text-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-3xl font-bold mb-4">Join Our Newsletter</h2>
+          <p className="text-gray-300 mb-8 max-w-xl mx-auto">
+            Subscribe to get special offers, free giveaways, and
+            once-in-a-lifetime deals.
+          </p>
+          <form className="max-w-md mx-auto flex">
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="flex-grow px-4 py-3 rounded-l-lg text-gray-900 focus:outline-none"
+              required
+            />
+            <button
+              type="submit"
+              className="bg-gray-700 px-6 py-3 rounded-r-lg font-medium hover:bg-gray-600 transition duration-300"
+            >
+              Subscribe
+            </button>
+          </form>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="bg-gray-100 pt-12 pb-8">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+              <h3 className="text-lg font-bold mb-4">FashionHub</h3>
+              <p className="text-gray-600 mb-4">
+                Your one-stop destination for trendy and comfortable clothing.
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-bold mb-4">Shop</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/products?category=men"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Men
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/products?category=women"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Women
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/products?category=accessories"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Accessories
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/products?category=footwear"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Footwear
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-bold mb-4">Help</h3>
+              <ul className="space-y-2">
+                <li>
+                  <Link
+                    href="/faq"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    FAQ
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/shipping"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Shipping
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/returns"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Returns
+                  </Link>
+                </li>
+                <li>
+                  <Link
+                    href="/contact"
+                    className="text-gray-600 hover:text-gray-900"
+                  >
+                    Contact Us
+                  </Link>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h3 className="text-lg font-bold mb-4">Contact</h3>
+              <address className="not-italic text-gray-600">
+                <p>123 Fashion Street</p>
+                <p>Styleville, ST 12345</p>
+                <p className="mt-2">Email: info@fashionhub.com</p>
+                <p>Phone: (123) 456-7890</p>
+              </address>
+            </div>
+          </div>
+
+          <div className="border-t border-gray-200 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-gray-600 text-sm mb-4 md:mb-0">
+              &copy; {new Date().getFullYear()} FashionHub. All rights reserved.
+            </p>
+            <div className="flex space-x-6">
+              <Link
+                href="/terms"
+                className="text-gray-600 hover:text-gray-900 text-sm"
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/privacy"
+                className="text-gray-600 hover:text-gray-900 text-sm"
+              >
+                Privacy Policy
+              </Link>
+            </div>
+          </div>
+        </div>
       </footer>
     </div>
   );
