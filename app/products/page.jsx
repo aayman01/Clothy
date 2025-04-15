@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
+import {  useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight, Filter, X, Search } from "lucide-react";
 
 export default function ProductsPage() {
-  const searchParams = useSearchParams();
+//   const searchParams = useSearchParams();
   const router = useRouter();
 
   // Get query parameters
